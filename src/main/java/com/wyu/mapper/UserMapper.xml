@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wyu.mapper.UserMapper">
+
+    <!--根据条件查询用户是否存在     id 就是接口的名字-->
+    <select id="queryUser" parameterType="map" resultType="int">
+        select count(1) from tbuser where userName = #{userName} and password = #{password}
+    </select>
+<!--    查找用户列表-->
+    <select id="queryUserList" parameterType="map" resultType="user">
+        select * from tbuser
+        <where>
+            <if test="userName!=null and userName!=''">
+                userName like concat("%",#{userName},"%")
+            </if>
+            <if test="sex!=null and sex!=''">
+                and sex=#{sex}
+            </if>
+        </where>
+
+    </select>
+<!--    注意id就是接口的名字-->
+    <insert id="addUser" parameterType="map" keyProperty="id">
+        insert into tbuser(uId,userName,password, uName, age, sex)
+        values(#{uId},#{userName},#{password},#{uName},#{age},#{sex})
+    </insert>
+<!--根据用户姓名更新数据-->
+    <update id="updateUserByName" parameterType="map">
+        update tbuser set uId=#{uId},userName=#{userName},password=#{password},uName=#{uName},age=#{age},sex=#{sex}
+        where userName=#{userName}
+    </update>
+
+
+<!--根据用户id更新数据-->
+    <update id="updateUserById" parameterType="map">
+        update tbuser set uId=#{uId},userName=#{userName},password=#{password},uName=#{uName},age=#{age},sex=#{sex}
+        where id=#{id}
+    </update>
+
+
+<!--根据姓名 删除 数据-->
+    <delete id="delUser" parameterType="map">
+        delete from tbuser where userName=#{userName}
+    </delete>
+<!--根据姓名 修改 密码-->
+    <update id="queryUserPass" parameterType="map">
+        update tbuser set password=#{password} where userName=#{userName}
+    </update>
+</mapper>

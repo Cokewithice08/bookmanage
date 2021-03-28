@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wyu.mapper.PlacardMapper">
+<!--    添加公告-->
+    <insert id="addPlacard" parameterType="map">
+        insert into placard(pId,pTitle,pMessage,issueTime)
+        values(#{pId},#{pTitle},#{pMessage},#{issueTime})
+    </insert>
+<!--    删除公告 -->
+    <delete id="deletePlacard" parameterType="map">
+        delete from placard where pId = #{pId}
+    </delete>
+<!--    编辑公告-->
+    <update id="editorPlacard" parameterType="map">
+        update placard set pTitle=#{pTitle},pMessage=#{pMessage},issueTime=#{issueTime}
+        where pId=#{pId}
+    </update>
+<!--    查询公告-->
+    <select id="queryPlacardList" parameterType="map" resultType="Placard">
+        select * from placard
+        <where>
+            <if test="pTitle != null and pTitle != ''">
+                pTitle like concat("%",#{pTitle},"%")
+            </if>
+            <if test="pMessage != null and pMessage != ''">
+                and pMessage like concat("%",#{pMessage},"%")
+            </if>
+            <if test="issueTime != null and issueTime!=''">
+                and issueTime like concat("%",#{issueTime},"%")
+            </if>
+        </where>
+        order by issueTime desc
+    </select>
+</mapper>
